@@ -7,7 +7,7 @@ local function CheckVersion()
     local currentVersion = GetResourceMetadata(RESOURCE_NAME, 'version')
     
     if not currentVersion then
-        print('^1[VERSION CHECKER]^0 No version specified in fxmanifest.lua for ' .. RESOURCE_NAME)
+        print('^4BLN Version Check (' .. RESOURCE_NAME .. ') ^1❌ ^0No version specified in fxmanifest.lua')
         return
     end
 
@@ -18,33 +18,37 @@ local function CheckVersion()
 
     PerformHttpRequest(config.api_url, function(statusCode, responseText, headers)
         if statusCode ~= 200 then
-            print(string.format(
-                '^1[VERSION CHECKER]^0 Failed to check version for %s. Status: %s',
-                RESOURCE_NAME,
-                statusCode
-            ))
+            print('^4BLN Version Check (' .. RESOURCE_NAME .. ') ^1❌ ^0Failed to check version. Status: ' .. statusCode)
             return
         end
 
         local response = json.decode(responseText)
+        local githubRepoLink = config.github_base_url .. '/' .. RESOURCE_NAME
         
         if response.needs_update then
-            print(string.format(
-                '^3[VERSION CHECKER]^0 Update available for %s: %s -> %s',
-                RESOURCE_NAME,
-                currentVersion,
-                response.latest_version
-            ))
-            print('^3[VERSION CHECKER]^0 Please update from: ' .. config.github_base_url .. '/' .. RESOURCE_NAME)
+            print(
+                '^4BLN Version Check (' .. 
+                RESOURCE_NAME .. 
+                ') ^1❌ ' ..
+                'Outdated (v' ..
+                currentVersion .. 
+                ') ^5- Update found: v' .. 
+                response.latest_version .. 
+                ' ^0(' .. 
+                githubRepoLink .. 
+                ')'
+            )
         else
-            print(string.format(
-                '^2[VERSION CHECKER]^0 %s is up to date (v%s)',
-                RESOURCE_NAME,
-                currentVersion
-            ))
+            print(
+                '^4BLN Version Check (' .. 
+                RESOURCE_NAME .. 
+                ') ^2✓ ' ..
+                'Up to date (v' .. 
+                currentVersion .. 
+                ')'
+            )
         end
     end, 'POST', payload, { ['Content-Type'] = 'application/json' })
 end
-
 
 CheckVersion()
