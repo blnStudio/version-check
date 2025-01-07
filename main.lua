@@ -7,7 +7,7 @@ local function CheckVersion()
     local currentVersion = GetResourceMetadata(RESOURCE_NAME, 'version')
     
     if not currentVersion then
-        print('^3[' .. RESOURCE_NAME .. '] ^1❌ ^0No version specified in fxmanifest.lua')
+        print('^3[' .. RESOURCE_NAME .. '] ^1❌ No version specified in fxmanifest.lua^0')
         return
     end
 
@@ -18,7 +18,7 @@ local function CheckVersion()
 
     PerformHttpRequest(config.api_url, function(statusCode, responseText, headers)
         if statusCode ~= 200 then
-            print('^3[' .. RESOURCE_NAME .. '] ^1❌ ^0Failed to check version. Status: ' .. statusCode)
+            print('^3[' .. RESOURCE_NAME .. '] ^1❌ Failed to check version. Status: ' .. statusCode ..'^0')
             return
         end
 
@@ -45,7 +45,7 @@ local function CheckVersion()
                 '] ^2✓ ' ..
                 'Up to date (v' .. 
                 currentVersion .. 
-                ')'
+                ')^0'
             )
         end
     end, 'POST', payload, { ['Content-Type'] = 'application/json' })
