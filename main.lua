@@ -4,7 +4,7 @@ local config = {
 }
 
 local function CheckVersion()
-    local currentVersion = GetResourceMetadata(RESOURCE_NAME, 'version', 0)
+    local currentVersion = GetResourceMetadata(RESOURCE_NAME, 'version')
     
     if not currentVersion then
         print('^1[VERSION CHECKER]^0 No version specified in fxmanifest.lua for ' .. RESOURCE_NAME)
