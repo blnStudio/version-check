@@ -5,7 +5,7 @@ local config = {
 
 local function CheckVersion()
     local currentVersion = GetResourceMetadata(RESOURCE_NAME, 'version')
-    
+
     if not currentVersion then
         print('^3[' .. RESOURCE_NAME .. '] ^1❌ No version specified in fxmanifest.lua^0')
         return
@@ -18,33 +18,32 @@ local function CheckVersion()
 
     PerformHttpRequest(config.api_url, function(statusCode, responseText, headers)
         if statusCode ~= 200 then
-            print('^3[' .. RESOURCE_NAME .. '] ^1❌ Failed to check version. Status: ' .. statusCode ..'^0')
+            print('^3[' .. RESOURCE_NAME .. '] ^1❌ Failed to check version. Status: ' .. statusCode .. '^0')
             return
         end
 
         local response = json.decode(responseText)
-        local githubRepoLink = config.github_base_url .. '/' .. RESOURCE_NAME
-        
+
         if response.needs_update then
             print(
-                '^3[' .. 
-                RESOURCE_NAME .. 
+                '^3[' ..
+                RESOURCE_NAME ..
                 '] ^1❌ ' ..
                 'Outdated (v' ..
-                currentVersion .. 
-                ') ^5- Update found: v' .. 
-                response.latest_version .. 
-                ' ^0(' .. 
-                githubRepoLink .. 
+                currentVersion ..
+                ') ^5- Update found: v' ..
+                response.latest_version ..
+                ' ^0(' ..
+                response.update_url ..
                 ')'
             )
         else
             print(
-                '^3[' .. 
-                RESOURCE_NAME .. 
+                '^3[' ..
+                RESOURCE_NAME ..
                 '] ^2✓ ' ..
-                'Up to date (v' .. 
-                currentVersion .. 
+                'Up to date (v' ..
+                currentVersion ..
                 ')^0'
             )
         end
